@@ -50,10 +50,19 @@ const App = () => {
           }, 5000)
         })
         .catch(error => {
-          setErrorMessage(
-            `Information of ${person.name} has already been removed from server`
-          )
-          setPersons(persons.filter(p => p.id !== person.id))
+          if (error.code === 'ERR_BAD_REQUEST') {
+            setErrorMessage(
+              error.response.data.error
+            )
+          } else {
+            setErrorMessage(
+              `Information of ${person.name} has already been removed from server`
+            )
+
+            setPersons(persons.filter(p => p.id !== person.id))
+          }
+          
+          
           setNewName('')
           setNewNumber('')
           setTimeout(() => {
